@@ -458,12 +458,4 @@ This project is licensed under the MIT License.
 
 ---
 
-# 👨‍💻 Developer
 
-**Hitesh Kumar**
-
-AI-Powered Campus Placement Management System
-
-Built as a production-grade DBMS & Full Stack project using Flask, PostgreSQL, SQLAlchemy, and AI-powered resume analysis.
-
-⭐ If you found this project helpful, please consider giving it a star.
