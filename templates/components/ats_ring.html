@@ -1,0 +1,48 @@
+{#
+  ATS Animated Progress Ring — Jinja2 macro
+  ─────────────────────────────────────────
+  Usage:
+    {% from "components/ats_ring.html" import ats_ring %}
+    {{ ats_ring(score=75) }}
+    {{ ats_ring(score=50, size="sm") }}
+    {{ ats_ring(score=92, size="lg", show_denom=True) }}
+
+  Parameters:
+    score      int   0-100
+    size       str   "mini" | "sm" | "md" (default) | "lg"
+    show_denom bool  Show "/100" below the score (default True)
+    extra_class str  Extra CSS classes on the wrapper
+#}
+
+{% macro ats_ring(score, size="md", show_denom=True, denom_text="/100", label_text="", extra_class="") %}
+{%- set s = (score | int) -%}
+{%- if s <= 39 -%}
+  {%- set color_cls = "ats-ring--red" -%}
+{%- elif s <= 69 -%}
+  {%- set color_cls = "ats-ring--orange" -%}
+{%- else -%}
+  {%- set color_cls = "ats-ring--blue" -%}
+{%- endif -%}
+<div class="ats-ring-wrap ats-ring--{{ size }}{% if extra_class %} {{ extra_class }}{% endif %} {{ color_cls }}"
+     data-ats-score="{{ s }}"
+     role="img"
+     aria-label="{% if label_text %}{{ label_text }}{% else %}ATS score{% endif %} {{ s }}{% if denom_text == '%' %}%{% else %} out of 100{% endif %}">
+  <svg class="ats-ring-svg"
+       viewBox="0 0 120 120"
+       xmlns="http://www.w3.org/2000/svg"
+       aria-hidden="true">
+    <!-- Track (grey background circle) -->
+    <circle class="ats-ring-track" cx="60" cy="60" r="48" />
+    <!-- Animated progress arc; colour + offset set by ats-ring.js -->
+    <circle class="ats-ring-progress {{ color_cls }}" cx="60" cy="60" r="48" />
+  </svg>
+  <div class="ats-ring-label">
+    <span class="ats-ring-score">{{ s }}{{ denom_text if denom_text == '%' else '' }}</span>
+    {%- if label_text %}
+    <small class="ats-ring-denom" style="font-size: 0.65rem; margin-top: 0.15rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">{{ label_text }}</small>
+    {%- elif show_denom %}
+    <small class="ats-ring-denom">{{ denom_text }}</small>
+    {%- endif %}
+  </div>
+</div>
+{% endmacro %}
